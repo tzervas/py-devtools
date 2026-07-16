@@ -173,10 +173,11 @@ def status():
     console.print(f"[blue]Virtual Environment:[/blue] {venv_status}")
 
 
-@main.command()
+@main.command("run")
 @click.argument("command")
 @click.option("--verbose", "-v", is_flag=True)
-def run(command, verbose):
+@click.pass_context
+def run(ctx, command, verbose):
     """Run common development commands."""
     commands = {
         "test": ["pytest"],
@@ -189,7 +190,7 @@ def run(command, verbose):
     if command not in commands:
         console.print(f"[red]Unknown command: {command}[/red]")
         console.print(f"[blue]Available commands: {', '.join(commands.keys())}[/blue]")
-        return 1
+        ctx.exit(1)
 
     cmd = commands[command]
     if verbose:
@@ -201,12 +202,12 @@ def run(command, verbose):
             console.print(f"[green]✅ {command} completed successfully[/green]")
         else:
             console.print(f"[red]❌ {command} failed[/red]")
-            if not verbose:
+            if not verbose and result.stderr:
                 console.print(result.stderr.decode())
-            return result.returncode
+            ctx.exit(result.returncode)
     except FileNotFoundError:
         console.print(f"[red]Command not found. Make sure dependencies are installed.[/red]")
-        return 1
+        ctx.exit(1)
 
 
 if __name__ == "__main__":
