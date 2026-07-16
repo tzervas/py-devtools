@@ -1,7 +1,9 @@
 """Tests for devtools CLI."""
 
-import pytest
+from unittest.mock import MagicMock, patch
+
 from click.testing import CliRunner
+
 from devtools.cli import main
 
 
@@ -22,8 +24,19 @@ def test_status_command():
 
 
 def test_run_command():
-    """Test run command with test."""
+    """Test run command without recursively invoking real pytest."""
     runner = CliRunner()
-    result = runner.invoke(main, ["run", "test"])
-    # This might fail if pytest is not available, but that's okay for basic test
-    assert result.exit_code in [0, 1]  # 0 for success, 1 for command failure
+    mock_result = MagicMock(returncode=0, stderr=b"")
+    with patch("devtools.cli.subprocess.run", return_value=mock_result) as mock_run:
+        result = runner.invoke(main, ["run", "test"])
+        assert result.exit_code == 0
+        mock_run.assert_called_once()
+        assert mock_run.call_args.args[0] == ["pytest"]
+
+
+def test_run_unknown_command():
+    """Unknown run subcommands should fail cleanly."""
+    runner = CliRunner()
+    result = runner.invoke(main, ["run", "not-a-real-command"])
+    assert result.exit_code == 1
+    assert "Unknown command" in result.output
