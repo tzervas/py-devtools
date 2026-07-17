@@ -1,5 +1,10 @@
 # py-devtools
 
+<!-- FLEET-BADGES:BEGIN -->
+[![CI](https://github.com/tzervas/py-devtools/actions/workflows/fleet-ci.yml/badge.svg?branch=main)](https://github.com/tzervas/py-devtools/actions/workflows/fleet-ci.yml?query=branch%3Amain)
+[![Security](https://github.com/tzervas/py-devtools/actions/workflows/fleet-security.yml/badge.svg?branch=main)](https://github.com/tzervas/py-devtools/actions/workflows/fleet-security.yml?query=branch%3Amain)
+<!-- FLEET-BADGES:END -->
+
 Suite of Python development utilities and project management tools with rich terminal interface.
 
 ## Installation
