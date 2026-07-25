@@ -3,7 +3,7 @@ name = "py-devtools"
 version = "0.1.0"
 description = "Suite of Python development utilities and project management tools"
 readme = "README.md"
-requires-python = ">=3.9"
+requires-python = ">=3.11"
 dependencies = [
     "click>=8.0.0",
     "rich>=13.0.0",
